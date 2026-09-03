@@ -898,10 +898,6 @@ table.budget-table td:last-child, table.budget-table th:last-child{text-align:ri
   <div class="budget-inner">
     <div class="section-label reveal" style="text-align:center;">Our budget</div>
     <div class="budget-greeting reveal" id="budget-greeting">Hello</div>
-    <select class="budget-select reveal" id="guest-select" onchange="onGuestChange(this.value)">
-      <option value="">Select your name</option>
-      <option value="tiwalola">Tiwalola</option>\n      <option value="dodo">Dodo</option>\n      <option value="sean">Sean</option>\n      <option value="seunoshy">SeunOshy</option>\n      <option value="timmytehila">TimmyTehila</option>\n      <option value="fave">Fave</option>\n      <option value="adeola">Adeola</option>\n      <option value="olori">Olori</option>\n      <option value="yemisi">Yemisi</option>\n      <option value="iceprincess">Iceprincess</option>\n      <option value="tosinsponsor">TosinSponsor</option>\n      <option value="namie">Namie</option>\n      <option value="wendywura">WendyWura</option>\n      <option value="oyinbaby">Oyinbaby</option>\n      <option value="twins-mummy">Twins Mummy</option>\n      <option value="tobiloba">Tobiloba</option>\n      <option value="eniola-baby">Eniola Baby</option>\n      <option value="aunty-bunmi">Aunty Bunmi</option>\n      <option value="abims">Abims</option>\n      <option value="dolly-p">Dolly P</option>
-    </select>
 
     <table class="budget-table reveal">
       <tr><th>Cost item</th><th>Per guest (USD)</th></tr>
@@ -1011,17 +1007,17 @@ const TOLS_GUESTS = {
 const TOLS_CONFIG = { showConfirmPopup: true };
 
 function applyGuestParam(){
-  const params = new URLSearchParams(window.location.search);
-  const g = params.get('g');
-  if(g && TOLS_GUESTS[g]){
-    document.getElementById('guest-select').value = g;
-    onGuestChange(g);
+  var slug = null;
+  var pathMatch = window.location.pathname.match(/\/marbella\/([a-z0-9-]+)/i);
+  if(pathMatch){
+    slug = pathMatch[1].toLowerCase();
+  } else {
+    var params = new URLSearchParams(window.location.search);
+    if(params.get('g')) slug = params.get('g');
   }
-}
-
-function onGuestChange(slug){
-  const name = TOLS_GUESTS[slug];
-  document.getElementById('budget-greeting').textContent = name ? ('Hello, ' + name) : 'Hello';
+  if(slug && TOLS_GUESTS[slug]){
+    document.getElementById('budget-greeting').textContent = 'Hello, ' + TOLS_GUESTS[slug];
+  }
 }
 
 function startCountdown(){
