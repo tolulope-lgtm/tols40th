@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Tols 4.0, Preview v2</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --purple:#73256C; --purple-deep:#4A1545; --purple-mid:#9B4495;
+    --pink:#F6DBEA; --pink-mid:#EDBBDA;
+    --gold:#C9A84C; --gold-light:#E8D5A3; --gold-pale:#FAF3E0;
+    --cream:#FAF6F0; --ivory:#FFFDF9; --charcoal:#414042;
+    --text:#1C0A1A; --text-soft:#6B4E6A;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0; font-family:'Jost', sans-serif; background:var(--cream); color:var(--text); padding:0;}
+  .section{max-width:640px; margin:0 auto; padding:70px 24px; border-bottom:1px dashed var(--pink-mid);}
+  .tag{text-align:center; color:var(--text-soft); font-size:12px; letter-spacing:2px; text-transform:uppercase; margin-bottom:10px;}
+  h1.serif, h2.serif, h3.serif{font-family:'Cormorant Garamond', serif; font-weight:600; color:var(--purple-deep); margin:0;}
+  .divider{text-align:center; color:var(--gold); margin:18px 0; font-size:16px;}
+
+  /* Popup */
+  .overlay{position:fixed; inset:0; background:rgba(28,10,26,0.55); display:flex; align-items:center; justify-content:center; z-index:50;}
+  .popup{background:var(--ivory); border:1px solid var(--gold-light); max-width:420px; width:90%; padding:46px 38px; text-align:center; position:relative; box-shadow:0 20px 60px rgba(74,21,69,0.25);}
+  .popup .close{position:absolute; top:14px; right:18px; background:none; border:none; font-size:20px; color:var(--text-soft); cursor:pointer;}
+  .popup h2{font-size:26px; line-height:1.35; margin:14px 0 16px;}
+  .popup p{color:var(--text-soft); font-size:14.5px; line-height:1.7; margin:0 0 28px;}
+  .popup a.cta{display:inline-block; background:var(--purple); color:var(--ivory); text-decoration:none; padding:13px 32px; font-size:12.5px; letter-spacing:1.8px; text-transform:uppercase;}
+
+  /* Countdown */
+  .countdown-card{background:var(--purple-deep); color:var(--ivory); padding:44px 30px; text-align:center; border:1px solid var(--gold);}
+  .countdown-card .label{color:var(--gold-light); font-family:'Jost',sans-serif; font-size:11px; letter-spacing:3px; text-transform:uppercase; margin-bottom:20px;}
+  .countdown-grid{display:flex; justify-content:center; gap:22px;}
+  .countdown-grid .num{font-family:'Cormorant Garamond', serif; font-weight:600; font-size:40px; color:var(--gold);}
+  .countdown-grid .unit-label{font-size:10.5px; letter-spacing:1.5px; color:var(--pink-mid); text-transform:uppercase; margin-top:2px;}
+
+  /* Budget page */
+  .budget-nav{font-size:12.5px; color:var(--text-soft); text-decoration:none; display:inline-block; margin-bottom:24px;}
+  .greeting{font-family:'Cormorant Garamond',serif; font-weight:600; font-size:30px; color:var(--purple-deep); text-align:center;}
+  select#guestSwitch{display:block; margin:0 auto 40px; padding:8px 14px; font-family:'Jost',sans-serif; border:1px solid var(--pink-mid); background:var(--ivory); color:var(--text); border-radius:2px;}
+  table.costs{width:100%; border-collapse:collapse; font-size:13.5px; margin-bottom:6px;}
+  table.costs th{text-align:left; color:var(--gold); font-size:10.5px; letter-spacing:1.5px; text-transform:uppercase; padding:6px 0; border-bottom:1px solid var(--gold-light);}
+  table.costs td{padding:9px 0; border-bottom:1px solid var(--pink-mid); color:var(--text);}
+  table.costs td:last-child, table.costs th:last-child{text-align:right;}
+  .cat-row td{font-family:'Cormorant Garamond',serif; font-weight:600; color:var(--purple); font-size:15px; padding-top:22px; border-bottom:none;}
+  .total-row td{font-weight:600; border-top:1px solid var(--purple); border-bottom:none; padding-top:14px;}
+  .share-box{background:var(--purple-deep); color:var(--ivory); text-align:center; padding:30px; margin:30px 0;}
+  .share-box .amt{font-family:'Cormorant Garamond',serif; font-size:38px; color:var(--gold); font-weight:600;}
+  .share-box .lbl{font-size:11px; letter-spacing:2px; text-transform:uppercase; color:var(--pink-light,#F6DBEA);}
+  .host-box{background:var(--pink); border:1px solid var(--gold); padding:28px 30px; margin:30px 0;}
+  .host-box h3{font-size:20px; text-align:center; margin-bottom:16px;}
+  .host-box p.intro{text-align:center; color:var(--text-soft); font-size:13.5px; margin:0 0 18px;}
+  .host-box ul{list-style:none; padding:0; margin:0;}
+  .host-box li{text-align:center; font-size:14px; padding:6px 0; color:var(--purple-deep);}
+  .note{font-size:12.5px; color:var(--text-soft); text-align:center; line-height:1.7; margin-top:22px;}
+  .rsvp-buttons{display:flex; gap:14px; justify-content:center; flex-wrap:wrap; margin-top:34px;}
+  .rsvp-buttons a{text-decoration:none; padding:13px 26px; font-size:13px; letter-spacing:0.5px;}
+  .btn-committed{background:var(--purple); color:var(--ivory); border:none; font-family:'Jost',sans-serif; cursor:pointer;}
+  .btn-cant-wait{background:transparent; color:var(--purple); border:1px solid var(--purple);}
+  .payment-panel{display:none; background:var(--gold-pale); border:1px solid var(--gold); padding:30px 32px; margin-top:30px;}
+  .pay-row{display:flex; justify-content:space-between; font-size:13.5px; padding:10px 0; border-bottom:1px solid var(--gold-light); color:var(--text);}
+  .pay-row strong{color:var(--purple-deep); font-weight:600;}
+  .account-block{margin-top:20px; padding-top:18px; border-top:1px solid var(--gold-light); text-align:center;}
+  .account-line{font-size:13.5px; color:var(--purple-deep); line-height:1.9;}
+
+  button.show-popup{display:block; margin:40px auto 0; background:none; border:1px solid var(--purple); color:var(--purple); padding:10px 20px; cursor:pointer; font-family:'Jost',sans-serif;}
+  .flag{background:#fff3cd; border:1px solid #e2c56b; padding:10px 14px; font-size:12px; color:#6b5a1f; text-align:left; margin-bottom:20px;}
+</style>
+</head>
+<body>
+
+<div class="section" style="border-bottom:none;">
+  <div class="tag">Preview only, nothing here is live</div>
+</div>
+
+<!-- POPUP -->
+<div class="section" style="padding-top:0;">
+  <h3 class="serif" style="text-align:center; margin-bottom:20px;">1 · Post-confirmation popup</h3>
+  <div id="overlay" class="overlay">
+    <div class="popup">
+      <button class="close" onclick="document.getElementById('overlay').style.display='none'">&times;</button>
+      <div class="divider">✦</div>
+      <h2 class="serif">You're confirmed. Now, let's get into the details.</h2>
+      <p>Quietly, clearly, exactly as promised, here's your share of the week we're building together.</p>
+      <a class="cta" href="#budget">See our shared costs</a>
+    </div>
+  </div>
+  <button class="show-popup" onclick="document.getElementById('overlay').style.display='flex'">Show popup</button>
+</div>
+
+<!-- COUNTDOWN -->
+<div class="section">
+  <h3 class="serif" style="text-align:center; margin-bottom:20px;">2 · Countdown</h3>
+  <div class="countdown-card">
+    <div class="label">Until Marbella</div>
+    <div class="countdown-grid">
+      <div><div class="num" id="d">--</div><div class="unit-label">Days</div></div>
+      <div><div class="num" id="h">--</div><div class="unit-label">Hrs</div></div>
+      <div><div class="num" id="m">--</div><div class="unit-label">Min</div></div>
+      <div><div class="num" id="s">--</div><div class="unit-label">Sec</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- BUDGET PAGE -->
+<div class="section" id="budget" style="border-bottom:none;">
+  <h3 class="serif" style="text-align:center; margin-bottom:20px;">3 · Personal budget page (draft)</h3>
+  <a class="budget-nav" href="#">← Back to the invitation</a>
+  <div class="divider">✦</div>
+  <div class="greeting" id="greetingText">Hello, Tiwalola</div>
+  <select id="guestSwitch"></select>
+
+  <table class="costs">
+    <tr><th>Cost item</th><th>Per guest (USD)</th></tr>
+    <tr class="cat-row"><td colspan="2">Villa</td></tr>
+    <tr><td>Villa, 6 bedrooms, 5 nights, room-share</td><td>$725.00</td></tr>
+    <tr><td>Daily cleaning</td><td>$45.00</td></tr>
+    <tr class="cat-row"><td colspan="2">Chef & food</td></tr>
+    <tr><td>Private chef, 4 breakfasts + 2 dinners</td><td>$270.00</td></tr>
+    <tr><td>Villa groceries</td><td>$12.60</td></tr>
+    <tr class="cat-row"><td colspan="2">Transport</td></tr>
+    <tr><td>Taxis across the week</td><td>$198.00</td></tr>
+    <tr><td>Ad hoc transport</td><td>$9.00</td></tr>
+    <tr class="cat-row"><td colspan="2">Activities</td></tr>
+    <tr><td>Old Town tapas & walking tour</td><td>$91.80</td></tr>
+    <tr><td>Private boat charter</td><td>$83.25</td></tr>
+    <tr><td>Flamenco show</td><td>$42.12</td></tr>
+    <tr><td>Marbella Fashion Museum</td><td>$11.88</td></tr>
+    <tr><td>Nerja Caves</td><td>$15.12</td></tr>
+    <tr class="cat-row"><td colspan="2">Miscellaneous</td></tr>
+    <tr><td>Ad hoc</td><td>$9.00</td></tr>
+    <tr class="total-row"><td>Total trip cost, per guest</td><td>$1,512.77</td></tr>
+  </table>
+
+  <div class="share-box">
+    <div class="lbl">Your share</div>
+    <div class="amt">$1,512.77</div>
+  </div>
+
+  <div class="host-box">
+    <h3 class="serif">✦ Mine to host</h3>
+    <p class="intro">Three moments of the week are my gift to you, already covered, and not part of your total above.</p>
+    <ul>
+      <li>✦ The farewell dinner</li>
+      <li>✦ Night out at the beach club, Day 2</li>
+      <li>✦ The fashion show experience, Day 4 evening</li>
+    </ul>
+  </div>
+
+  <div class="note">
+    Lunches are the one thing left open, yours to choose each day, as you like.<br>
+    The villa is six bedrooms, shared across the twelve of us.
+  </div>
+
+  <div class="rsvp-buttons">
+    <button class="btn-committed" id="committedBtn" onclick="document.getElementById('paymentPanel').style.display='block'; this.style.display='none';">I am committed 🥂</button>
+    <a class="btn-cant-wait" href="https://wa.me/2348037289268?text=Tols%2C%20I%20can%27t%20wait%20%F0%9F%A4%8D%20Roll%20on%20March%202027." target="_blank">I can't wait 🤍</a>
+  </div>
+
+  <div class="payment-panel" id="paymentPanel">
+    <div class="divider">✦</div>
+    <h3 class="serif" style="text-align:center;">Settling In</h3>
+    <p class="intro" style="text-align:center; color:var(--text-soft); font-size:13.5px; margin:10px 0 22px;">Here's how and when, whenever you're ready.</p>
+    <div class="pay-row"><span>First payment</span><strong>$700, by 29 October 2026</strong></div>
+    <div class="pay-row"><span>Balance</span><strong>On or before 10 February 2027</strong></div>
+    <div class="account-block">
+      <div class="account-line">Tolulope Omoleye</div>
+      <div class="account-line">GTB, USD account 0231294215</div>
+      <div class="account-line">Narration: Marbella</div>
+    </div>
+    <a class="btn-committed" style="display:block; text-align:center; margin-top:22px;" href="https://wa.me/2348037289268?text=Tols%2C%20I%27m%20committed%20%F0%9F%A5%82%20Marbella%202027%2C%20count%20me%20in.%20First%20payment%20on%20its%20way." target="_blank">Let Tols know 🥂</a>
+  </div>
+
+  <a class="budget-nav" href="#" style="display:block; text-align:center; margin-top:34px;">← Back to the invitation</a>
+</div>
+
+<script>
+  const target = new Date('2027-03-26T15:00:00+01:00').getTime();
+  function tick(){
+    const now = Date.now(); let diff = Math.max(0, target - now);
+    const d = Math.floor(diff/86400000); diff -= d*86400000;
+    const h = Math.floor(diff/3600000); diff -= h*3600000;
+    const m = Math.floor(diff/60000); diff -= m*60000;
+    const s = Math.floor(diff/1000);
+    document.getElementById('d').textContent = d;
+    document.getElementById('h').textContent = String(h).padStart(2,'0');
+    document.getElementById('m').textContent = String(m).padStart(2,'0');
+    document.getElementById('s').textContent = String(s).padStart(2,'0');
+  }
+  tick(); setInterval(tick, 1000);
+
+  const guests = ["Tiwalola","Dodo","Sean","SeunOshy","TimmyTehila","Fave","Adeola","Olori","Yemisi","Iceprincess","TosinSponsor","Namie","WendyWura","Oyinbaby","Twins Mummy","Tobiloba","Eniola Baby","Aunty Bunmi","Abims","Dolly P"];
+  const sel = document.getElementById('guestSwitch');
+  guests.forEach(g => { const o = document.createElement('option'); o.value = g; o.textContent = g; sel.appendChild(o); });
+  sel.addEventListener('change', () => { document.getElementById('greetingText').textContent = 'Hello, ' + sel.value; });
+</script>
+
+</body>
+</html>
